@@ -1,14 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using ZXing;
+using UnityEngine.UI;
 
 public class QRScanner : MonoBehaviour
 {
-    WebCamTexture webcamTexture;
-    string QrCode = string.Empty;
+    public TMP_Text ShiftInfoHolder;
+    private WebCamTexture webcamTexture;
+    private string QrCode = string.Empty;
 
     void Start()
     {
@@ -22,31 +23,51 @@ public class QRScanner : MonoBehaviour
     {
         IBarcodeReader barCodeReader = new BarcodeReader();
         webcamTexture.Play();
-        var snap = new Texture2D(webcamTexture.width, webcamTexture.height, TextureFormat.ARGB32, false);
+        var snap = new Texture2D(
+            webcamTexture.width,
+            webcamTexture.height,
+            TextureFormat.ARGB32,
+            false
+        );
 
-        while (string.IsNullOrEmpty(QrCode))
+        while (true)
         {
+            bool decodeAttempted = false;
             try
             {
                 snap.SetPixels32(webcamTexture.GetPixels32());
-                var Result = barCodeReader.Decode(snap.GetRawTextureData(), webcamTexture.width, webcamTexture.height, RGBLuminanceSource.BitmapFormat.ARGB32);
+                var Result = barCodeReader.Decode(
+                    snap.GetRawTextureData(),
+                    webcamTexture.width,
+                    webcamTexture.height,
+                    RGBLuminanceSource.BitmapFormat.ARGB32
+                );
 
                 if (Result != null)
                 {
                     QrCode = Result.Text;
                     if (!string.IsNullOrEmpty(QrCode))
                     {
-                        Debug.Log("DECODED TEXT FROM QR: " + QrCode);
-                        break;
+                        ShiftInfoHolder.text += QrCode + "\n";
+                        decodeAttempted = true;
                     }
                 }
             }
-
-            catch (Exception ex) { Debug.LogWarning(ex.Message); }
-            yield return null;
+            catch (Exception ex)
+            {
+                Debug.LogWarning(ex.Message);
+            }
+            if (decodeAttempted)
+            {
+                webcamTexture.Stop();
+                yield return new WaitForSeconds(5);
+                webcamTexture.Play();
+            }
+            else
+            {
+                yield return null;
+            }
         }
-
-        webcamTexture.Stop();
     }
 
     private void OnGUI()
