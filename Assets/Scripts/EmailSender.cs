@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class EmailSender : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class EmailSender : MonoBehaviour
     public string ReceiverUser;
     public string ReceiverAddress;
     public string MessageSubject;
-    public string MessageContent;
+    public TMP_Text MessageContentTMP;
 
     private void OnEnable()
     {
@@ -40,7 +41,6 @@ public class EmailSender : MonoBehaviour
     {
         var task = Execute();
         yield return new WaitUntil(() => task.IsCompleted);
-
         if (task.IsFaulted)
         {
             Debug.LogError($"Failed to send email: {task.Exception?.Message}");
@@ -63,8 +63,8 @@ public class EmailSender : MonoBehaviour
         var from = new EmailAddress(SenderAddress, SenderUser);
         var subject = MessageSubject;
         var to = new EmailAddress(ReceiverAddress, ReceiverUser);
-        var plainTextContent = MessageContent;
-        var htmlContent = "<strong>" + MessageContent + "</strong>";
+        var plainTextContent = MessageContentTMP.text;
+        var htmlContent = "<strong>" + MessageContentTMP.text + "</strong>";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
         try
@@ -89,8 +89,7 @@ public class EmailSender : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Configuration file not found: {ConfigFilePath}. Creating a new one with default empty values.");
-
+            Debug.LogWarning("Configuration file not found: " + ConfigFilePath);
             config = new EmailConfig
             {
                 InjectedKey = "",
@@ -100,8 +99,7 @@ public class EmailSender : MonoBehaviour
 
             string newJson = JsonUtility.ToJson(config, true);
             File.WriteAllText(ConfigFilePath, newJson);
-
-            Debug.Log("A new configuration file was created with empty values.");
+            Debug.Log("A new configuration file was created.");
         }
     }
 }
