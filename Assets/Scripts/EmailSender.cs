@@ -9,7 +9,6 @@ public class EmailSender : MonoBehaviour
 {
     public string ConfigFilePath = "Assets/config.json";
     private EmailConfig config;
-
     public bool debugSend;
     public string SenderUser;
     public string SenderAddress;
@@ -105,12 +104,4 @@ public class EmailSender : MonoBehaviour
             Debug.Log("A new configuration file was created with empty values.");
         }
     }
-}
-
-[System.Serializable]
-public class EmailConfig
-{
-    public string InjectedKey;
-    public string SenderAddress;
-    public string ReceiverAddress;
 }
