@@ -1,21 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using TMPro;
 
 public class ConfigFunctions : MonoBehaviour
 {
-    public string ConfigFilePath = "Assets/config.json";
-    private EmailConfig config;
-
     public TMP_InputField apiKeyInputField;
     public TMP_InputField senderEmailInputField;
     public TMP_InputField receiverEmailInputField;
 
     private void OnEnable()
     {
-        LoadConfiguration();
         UpdateUI();
     }
 
@@ -23,8 +17,8 @@ public class ConfigFunctions : MonoBehaviour
     {
         if (apiKeyInputField != null)
         {
-            config.InjectedKey = apiKeyInputField.text;
-            SaveConfiguration();
+            PlayerPrefs.SetString("InjectedKey", apiKeyInputField.text);
+            PlayerPrefs.Save();
             UpdateUI();
             Debug.Log("SendGrid API Key updated successfully.");
         }
@@ -34,8 +28,8 @@ public class ConfigFunctions : MonoBehaviour
     {
         if (senderEmailInputField != null)
         {
-            config.SenderAddress = senderEmailInputField.text;
-            SaveConfiguration();
+            PlayerPrefs.SetString("SenderAddress", senderEmailInputField.text);
+            PlayerPrefs.Save();
             UpdateUI();
             Debug.Log("Sender email updated successfully.");
         }
@@ -45,50 +39,20 @@ public class ConfigFunctions : MonoBehaviour
     {
         if (receiverEmailInputField != null)
         {
-            config.ReceiverAddress = receiverEmailInputField.text;
-            SaveConfiguration();
+            PlayerPrefs.SetString("ReceiverAddress", receiverEmailInputField.text);
+            PlayerPrefs.Save();
             UpdateUI();
             Debug.Log("Receiver email updated successfully.");
         }
     }
 
-    private void LoadConfiguration()
-    {
-        if (File.Exists(ConfigFilePath))
-        {
-            string json = File.ReadAllText(ConfigFilePath);
-            config = JsonUtility.FromJson<EmailConfig>(json);
-        }
-        else
-        {
-            Debug.LogWarning($"Configuration file not found: {ConfigFilePath}. Creating a new one with default empty values.");
-            config = new EmailConfig
-            {
-                InjectedKey = "",
-                SenderAddress = "",
-                ReceiverAddress = ""
-            };
-
-            SaveConfiguration();
-        }
-
-        UpdateUI();
-    }
-
-    private void SaveConfiguration()
-    {
-        string json = JsonUtility.ToJson(config, true);
-        File.WriteAllText(ConfigFilePath, json);
-        Debug.Log("Configuration file saved.");
-    }
-
-    public void UpdateUI()
+    private void UpdateUI()
     {
         if (apiKeyInputField != null)
-            apiKeyInputField.text = config.InjectedKey;
+            apiKeyInputField.text = PlayerPrefs.GetString("InjectedKey", "");
         if (senderEmailInputField != null)
-            senderEmailInputField.text = config.SenderAddress;
+            senderEmailInputField.text = PlayerPrefs.GetString("SenderAddress", "");
         if (receiverEmailInputField != null)
-            receiverEmailInputField.text = config.ReceiverAddress;
+            receiverEmailInputField.text = PlayerPrefs.GetString("ReceiverAddress", "");
     }
 }
