@@ -61,6 +61,7 @@ public class QRScanner : MonoBehaviour
             {
                 webcamTexture.Stop();
                 yield return new WaitForSeconds(5);
+                QrCode = string.Empty;
                 webcamTexture.Play();
             }
             else
@@ -75,7 +76,7 @@ public class QRScanner : MonoBehaviour
         int w = Screen.width, h = Screen.height;
         GUIStyle style = new GUIStyle();
         Rect rect = new Rect(0, 0, w, h * 2 / 100);
-        style.alignment = TextAnchor.UpperLeft;
+        style.alignment = TextAnchor.MiddleCenter;
         style.fontSize = h * 2 / 50;
         style.normal.textColor = new Color(0.0f, 0.0f, 0.5f, 1.0f);
         string text = QrCode;
