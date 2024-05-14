@@ -2382,7 +2382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 000e4e4ef3546524a955d0548a0e3b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigFilePath: Assets/config.json
   apiKeyInputField: {fileID: 760709871}
   senderEmailInputField: {fileID: 1777572831}
   receiverEmailInputField: {fileID: 1075940092}
@@ -3054,7 +3053,7 @@ GameObject:
   - component: {fileID: 1262991969}
   - component: {fileID: 1262991971}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: ScannerHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3904,13 +3903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4dbbb0a2cb4f48489d6f2ae97a26a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigFilePath: Assets/config.json
   debugSend: 0
-  SenderUser: sami
-  SenderAddress: 
-  ReceiverUser: "sami my\xF6s"
-  ReceiverAddress: 
-  MessageSubject: testi jee
   MessageContentTMP: {fileID: 1756100053}
 --- !u!4 &1690288719
 Transform:
@@ -4118,7 +4111,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: aa
+  m_text: 'Shift log:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
