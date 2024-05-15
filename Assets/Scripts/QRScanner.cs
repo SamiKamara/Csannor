@@ -10,19 +10,54 @@ public class QRScanner : MonoBehaviour
     public TMP_Text ShiftInfoHolder;
     private WebCamTexture webcamTexture;
     private string QrCode = string.Empty;
+    private Coroutine qrCoroutine;
 
     void Start()
     {
         var renderer = GetComponent<RawImage>();
         webcamTexture = new WebCamTexture(512, 512);
         renderer.texture = webcamTexture;
-        StartCoroutine(GetQRCode());
+        StartScanning();
+    }
+
+    private void OnEnable()
+    {
+        StartScanning();
+    }
+
+    private void OnDisable()
+    {
+        StopScanning();
+    }
+
+    private void StartScanning()
+    {
+        if (webcamTexture != null)
+        {
+            webcamTexture.Play();
+            if (qrCoroutine == null)
+            {
+                qrCoroutine = StartCoroutine(GetQRCode());
+            }
+        }
+    }
+
+    private void StopScanning()
+    {
+        if (webcamTexture != null && webcamTexture.isPlaying)
+        {
+            webcamTexture.Stop();
+        }
+        if (qrCoroutine != null)
+        {
+            StopCoroutine(qrCoroutine);
+            qrCoroutine = null;
+        }
     }
 
     IEnumerator GetQRCode()
     {
         IBarcodeReader barCodeReader = new BarcodeReader();
-        webcamTexture.Play();
         var snap = new Texture2D(
             webcamTexture.width,
             webcamTexture.height,
