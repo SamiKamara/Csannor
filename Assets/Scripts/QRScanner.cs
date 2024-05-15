@@ -48,7 +48,8 @@ public class QRScanner : MonoBehaviour
                     QrCode = Result.Text;
                     if (!string.IsNullOrEmpty(QrCode))
                     {
-                        ShiftInfoHolder.text += "\n" + QrCode + "\n";
+                        string currentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        ShiftInfoHolder.text += "\n" + currentDateTime + "\n" + QrCode + "\n";
                         decodeAttempted = true;
                     }
                 }
