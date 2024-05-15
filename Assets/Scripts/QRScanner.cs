@@ -48,7 +48,7 @@ public class QRScanner : MonoBehaviour
                     QrCode = Result.Text;
                     if (!string.IsNullOrEmpty(QrCode))
                     {
-                        ShiftInfoHolder.text += QrCode + "\n";
+                        ShiftInfoHolder.text += "\n" + QrCode + "\n";
                         decodeAttempted = true;
                     }
                 }
