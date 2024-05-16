@@ -120,4 +120,9 @@ public class QRScanner : MonoBehaviour
         string text = QrCode;
         GUI.Label(rect, text, style);
     }
+
+    public void ClearShiftLog()
+    {
+        ShiftInfoHolder.text = "Shift log: \n";
+    }
 }
