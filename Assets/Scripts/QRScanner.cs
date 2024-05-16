@@ -96,7 +96,7 @@ public class QRScanner : MonoBehaviour
             if (decodeAttempted)
             {
                 webcamTexture.Stop();
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(3);
                 QrCode = string.Empty;
                 webcamTexture.Play();
             }
