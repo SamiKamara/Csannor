@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using ZXing;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class QRScanner : MonoBehaviour
 {
@@ -107,6 +108,8 @@ public class QRScanner : MonoBehaviour
         }
     }
 
+    private const float lineSpacing = 35.0f;
+
     private void OnGUI()
     {
         int w = Screen.width, h = Screen.height;
@@ -114,11 +117,34 @@ public class QRScanner : MonoBehaviour
         style.alignment = TextAnchor.MiddleCenter;
         style.fontSize = h * 2 / 50;
         style.normal.textColor = new Color(0.0f, 0.0f, 0.5f, 1.0f);
-        float textHeight = h * 2 / 100;
-        float textWidth = w;
-        Rect rect = new Rect((w - textWidth) / 2, (h - textHeight) / 2, textWidth, textHeight);
+
         string text = QrCode;
-        GUI.Label(rect, text, style);
+        string[] lines = SplitTextIntoLines(text, 20);
+
+        float textHeight = h * 2 / 100;
+        float totalHeight = textHeight * lines.Length + lineSpacing * (lines.Length - 1);
+        float startY = (h - totalHeight) / 2;
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            Rect rect = new Rect(0, startY + i * (textHeight + lineSpacing), w, textHeight);
+            GUI.Label(rect, lines[i], style);
+        }
+    }
+
+    private string[] SplitTextIntoLines(string text, int maxLineLength)
+    {
+        List<string> lines = new List<string>();
+
+        for (int i = 0; i < text.Length; i += maxLineLength)
+        {
+            if (i + maxLineLength < text.Length)
+                lines.Add(text.Substring(i, maxLineLength));
+            else
+                lines.Add(text.Substring(i));
+        }
+
+        return lines.ToArray();
     }
 
     public void ClearShiftLog()
